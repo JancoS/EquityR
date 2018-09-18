@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1537206105793.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4293338114",
+    "id" : "971F529",
+    "lastKnownWriteTime" : 1537206234,
+    "last_content_update" : 1537206234953,
+    "path" : "~/EquityR/R/FCFF_Basic.R",
+    "project_path" : "R/FCFF_Basic.R",
+    "properties" : {
+        "cursorPosition" : "18,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

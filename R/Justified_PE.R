@@ -1,0 +1,66 @@
+#' @title Justified_PE
+#' @description Calculate the justified PE's
+#' @param Ticker Symbol of stock to be evaluated
+#' @param Req The Required return on equity
+#' @param growth_rate Optional growth_rate (%), otherwise calculated using Growth_Rate function
+#' @export
+#' @seealso 
+#' @return Just_PE The justified PE as output
+#' @examples 
+
+Justified_PE <- function(Ticker, Req, growth_rate = 0) {
+  
+  # Get the required data and date
+  
+  Tod <- lubridate::today() - lubridate::days(1)
+  
+  MData <- tq_get(Ticker, get = "key.ratios")
+  
+  # Get the latest price from the previously calculated date
+  
+  Price <- tq_get(Ticker, get = "stock.prices", From = Tod)
+  
+  # Calculate the justified PE
+  
+  EPS <- MData %>% filter(section == "Financials") %>% 
+    select(data) %>% unnest() %>% 
+    filter(category == "Earnings Per Share USD")
+  
+  # Get the latest EPS
+  
+  EPS_latest <- EPS %>% filter(row_number() == nrow(EPS)) %>% pull(value)
+  
+  # Get the latest Div
+  
+  Div_latest <- Fin %>% filter(category == "Dividends USD") %>% 
+    filter(row_number() == nrow(EPS)) %>% pull(value)
+  
+  # Get the growth_rate g
+  
+  if (growth_rate == 0) {
+    
+    growth_rate <- Growth_Rate(Ticker)
+    
+  } else {
+    
+    growth_rate <- growth_rate/100
+    
+  }
+  
+  
+  # Calculate: D/E(1 + g) / (r-g)
+  
+  Justified_PE <- ((Div_latest/EPS_latest)*(1+growth_rate))/(Req - g)
+  
+  PE_Morningstar <- MData %>% filter(section == "Valuation Ratios") %>% 
+    select(data) %>% unnest() %>% 
+    filter(category == "Price to Earnings") %>% 
+    filter(row_number() == nrow(ROE)) %>% 
+    pull(value)
+  
+  Just_PE <- list(Justified = Justified_PE, Morningstar = PE_Morningstar)
+  
+  return(Just_PE)
+  
+}
+

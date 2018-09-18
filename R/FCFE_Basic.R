@@ -1,0 +1,47 @@
+#' @title FCFE_Basic
+#' @description Basic valuation of a company based on the FCFE. The FCFE is calculated by adjusting the FCFF by Net Borrowings
+#' @param Ticker Ticker of the company to be evaluated
+#' @param Req Required rate of return
+#' @param year Year when latest results is available
+#' @param growth_rate The growth rate g
+#' @export
+#' @seealso
+#' @return FCFE_Value
+#' @examples
+
+FCFE_Basic <- function(Ticker, Req, year, growth_rate) {
+
+  # Get the required data
+
+  CF_Data <- GetCashFlow(Ticker, year)
+
+  CF_Data <- CF_Data %>%
+    mutate(What_Year = year(EndDate)) %>%
+    filter(What_Year == year)
+
+  MData <- tq_get(Ticker, get = "key.ratios") %>%
+    filter(section == "Financials") %>%
+    select(data) %>% unnest()
+
+  # Get the Net_Borrowings from the cash flow data
+
+  NB <- CF_Data %>%
+    filter(Metric == "Proceeds from Issuance of Long-term Debt") %>% pull(Amount)
+
+  # Calculate FCFE from the FCFF
+
+  FCFF <- MData %>%
+    filter(category == "Free Cash Flow USD Mil")
+
+  FCFF_latest <- FCFF %>%
+    filter(row_number() == nrow(FCFF)) %>% pull(value)
+
+  FCFE_latest <- FCFF_latest + NB
+
+  # Calculate Value
+
+  FCFE_Value <- (FCFE_latest*(1+growth_rate))/(Req - growth_rate)
+
+  return(FCFE_Value)
+
+}

@@ -1,0 +1,79 @@
+#' @title Calculate_FCFF
+#' @description The function calculates the free cash flow to firm (FCFF) using the cash flow financials from GetCashFlow function and the Morningstar data.
+#'              The FCFF is calculated from the Net Income, Change in working capital, depreciation expense and Capital expenditures (CAPEX).
+#' @param Ticker Ticker of the stock to be evaluated
+#' @param year Year to calculate FCFF for
+#' @export
+#' @seealso \code{\link[finreportr]{GetCashFlow()}}
+#' @return FCFF Returns the calculated FCFF
+#' @examples \dontrun {
+#'
+#' Ticker <- "AAPL"
+#' year <- 2017
+#' FCFF_AAPL_2017 <- Calculate_FCFF(Ticker, year)
+#'
+#' }
+
+Calculate_FCFF <- function(Ticker, year) {
+
+  # Get Cash flow and Income Statement data
+
+  CF_Data <- GetCashFlow(Ticker, year)
+
+  Fin <- tq_get(Ticker, get = "Key.ratios") %>%
+    filter(section == "Financials") %>%
+    select(data) %>% unnest()
+
+  # Only include data from the year provided by user
+
+  CF_Data <- CF_Data %>%
+    mutate(What_Year = year(endDate)) %>%
+    filter(What_Year == year)
+
+  # Start by finding the NI
+
+  NI <- CF_Data %>%
+    filter(Metric == "Net Income (Loss) Attributable to Parent")
+
+  # Only keep most recent number
+
+  if (nrow(NI) > 1) {
+
+    NI <- as.numeric(NI %>% filter(row_number() == nrow(NI)) %>% pull(Amount))
+
+  } else{
+
+    NI <- as.numeric(NI  %>% pull(Amount))
+
+  }
+
+  # Get the CAPEX
+
+  CAPEX <- as.numeric(CF_Data %>%
+    filter(Metric == "Payments to Acquire Property, Plant, and Equipment") %>% pull(Amount))
+
+  # Get Depreciation expense
+
+  Dep_Expense <- as.numeric(CF_Data %>%
+    filter(Metric == "Depreciation, Amortization and Accretion, Net") %>% pull(Amount))
+
+  # Calculate the change in working capital
+
+  WC <- Fin %>%
+    filter(category == "Working Capital USD Mil")
+
+  WC_old <- WC %>%
+    filter(row_number() == (nrow(WC) - 1)) %>% pull(value)
+
+  WC_new <- WC %>%
+    filter(row_number() == nrow(WC)) %>% pull(value)
+
+  change_in_WC <- WC_new - WC_old
+
+  # Calculate FCFF
+
+  FCFF <- NI + Dep_Expense - CAPEX - change_in_WC
+
+  return(FCFF)
+
+}

@@ -1,0 +1,53 @@
+#' @title Single_DDM
+#' @description The function calculates stock value based on a single stage DDM model (Gordon Growth Model)
+#' @param Ticker  Provide the stock ticker, which will be searched for on morningstar and yahoo finance
+#' @param Req The required rate of return used for discounting as a fraction
+#' @param growth_rate growth_rate
+#' @export
+#' @seealso \code{\link[tidyquant]{tq_get}}
+#' @return DDM_Out The results of the DDM model
+#' @examples \dontrun {
+#'
+#' #Ticker <- "MSFT"
+#' #Req <- 0.12
+#' #growth_rate <- 0.1
+#'  # Single_Stage_DDM <- Single_DDM(Ticker, Req, growth_rate)
+#'
+#' }
+
+Single_DDM <- function(Ticker, Req, growth_rate) {
+
+  # First collect the data required from morningstar
+
+  MData <- as_tibble(tq_get(Ticker, get = "key.ratios"))
+
+  # What do you need for a DDM?
+  # 1. The required rate of return
+  # 2. The terminal growth rate g
+  # 3. The latest dividend
+
+  Divs <- MData %>%
+    filter(section == "Financials") %>%
+    select(data) %>% unnest() %>%
+    filter(category == "Dividends USD")
+
+  Div_latest <- Divs %>%
+    filter(row_number() == nrow(Divs)) %>% pull(value)
+
+  # 4. The ROE
+
+  ROE <- MData %>%
+    filter(section == "Profitability") %>%
+    select(data) %>% unnest() %>%
+    filter(category == "Return on Equity %")
+
+  ROE_latest <- ROE %>%
+    filter(row_number() == nrow(ROE))
+
+  # Basic single stage DDM: V = DPS(1+g)/(r-g)
+
+   Single_DDM_Value <- Div_latest*(1+growth_rate)/(Req - growth_rate)
+
+     return(Single_DDM_Value)
+
+}

@@ -1,0 +1,60 @@
+#' @title Justified_PB
+#' @author Janco Strydom
+#' @description Calculate the justified Price to Book ratio (P/B) based on fundamentals
+#' @param Ticker The symbol of the stock to be evaluated
+#' @param Req The required return on equity
+#' @param growth_rate Optional growth_rate (%), otherwise calculated using Growth_Rate function
+#' @export
+#' @seealso 
+#' @return Just_PB The justified PB output
+
+Justified_PB <- function(Ticker, Req, growth_rate = 0) {
+  
+  # Get the latest date and data
+  
+  Tod <- lubridate::today() - lubridate::days(1)
+  
+  MData <- tq_get(Ticker, get = "key.ratios")
+  
+  Price <- tq_get(Ticker, get = "stock.prices", From = Tod)
+  
+  # Get the ROE
+  
+  ROE <- MData %>% filter(section == "Profitability") %>% 
+    select(data) %>% unnest() %>% 
+    filter(category == "Return on Equity %")
+  
+  ROE_latest <- ROE %>% filter(row_number() == nrow(ROE)) %>% pull(value)
+  
+  # Get the growth rate
+  
+  if (growth_rate == 0) {
+    
+    growth_rate <- Growth_Rate(Ticker)
+    
+  } else {
+    
+    growth_rate <- growth_rate/100
+    
+  }
+  
+  # Calculate the justified PB ratio
+  
+  Justified_PB <- (ROE_latest - growth_rate)/(Req - growth_rate)
+  
+  # Get the PB from Morningstar
+  
+  PB_Morningstar <- MData %>% filter(section == "Valuation Ratios") %>% 
+    select(data) %>% unnest() %>% 
+    filter(category == "Price to Book") %>% 
+    filter(row_number() == nrow(ROE)) %>% 
+    pull(value)
+  
+  Just_PB <- list(Justified = Justified_PB, Morningstar = PB_Morningstar)
+  
+  return(Just_PB) 
+  
+}
+
+
+ 

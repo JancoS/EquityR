@@ -1,0 +1,71 @@
+#' @title Justified_PS
+#' @author Janco Strydom
+#' @description Calculate the justified Price to Sales (P/s) using fundamentals
+#' @param Ticker The symbol of the stock to be evaluated
+#' @param Req The required return on equity
+#' @param growth_rate Optional growth_rate (%), otherwise calculated using Growth_Rate function
+#' @export
+#' @seealso 
+#' @return Just_PS The justified PS output
+
+Justified_PS <- function(Ticker, Req, growth_rate = 0) {
+  
+  # Get the latest date and data
+  
+  Tod <- lubridate::today() - lubridate::days(1)
+  
+  MData <- tq_get(Ticker, get = "key.ratios")
+  
+  Price <- tq_get(Ticker, get = "stock.prices", From = Tod)
+  
+  # Get the Retention ratio
+  
+  Fin <- MData %>% filter(section  == "Financials") %>% 
+    select(data) %>% unnest() 
+  
+  PR <- Fin %>% filter(category == "Payout Ratio % *")
+  Ear <- Fin %>% filter(category == "Revenue USD Mil")
+  NI <- Fin %>% filter(category == "Net Income USD Mil")
+  
+  Payout_Ratio <- Fin %>% 
+    mutate(Payout_Ratio = value/100) %>% 
+    filter(row_number() == nrow(PR)) %>% pull(Payout_Ratio)
+  
+  NI_latest <- NI %>% 
+    filter(row_number() == nrow(NI)) %>% pull(value)
+  
+  Ear_latest <- Ear %>% 
+    filter(row_number() == nrow(Ear)) %>% pull(value)
+    
+  
+  # Get the growth rate
+  
+  if (growth_rate == 0) {
+    
+    growth_rate <- Growth_Rate(Ticker)
+    
+  } else {
+    
+    growth_rate <- growth_rate/100
+    
+  }
+  
+  # Calculate the justified PS ratio: E/S *(1-b)*(1+g)/(r-g)
+  
+  Justified_PS <- ((NI_latest/Ear_latest)*(Payout_Ratio)*(1+growth_rate))/(Req - growth_rate)
+  
+  # Get the PB from Morningstar
+  
+  PS_Morningstar <- MData %>% filter(section == "Valuation Ratios") %>% 
+    select(data) %>% unnest() %>% 
+    filter(category == "Price to Sales") %>% 
+    filter(row_number() == nrow(ROE)) %>% 
+    pull(value)
+  
+  Just_PS <- list(Justified = Justified_PB, Morningstar = PB_Morningstar)
+  
+  return(Just_PS) 
+  
+}
+
+

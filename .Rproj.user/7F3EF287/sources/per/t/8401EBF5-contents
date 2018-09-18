@@ -1,0 +1,215 @@
+#' @title Plot_Ratios
+#' @description Plot financial ratios using the morningstar data of a specific company.
+#' @param Ticker The stock Ticker to be evaluated
+#' @param Ratios The ratios you wish to plot. Can be either a single charactar or character vector.
+#' @export
+#' @seealso \code{\link[tidyquant]{tq_get}}
+#' @return Out_plots The output containing all plots as a list
+#' @examples \dontrun {
+#'
+#'  Plot_Ratios("AAPL", "Net Income USD")
+#'
+#' }
+
+Plot_Ratios <- function(Ticker, Ratios) {
+
+  # Get ratios from Morningstar
+
+  Mdata <- as_tibble(tq_get(Ticker, get = "key.ratios"))
+
+  # Check which ratios are desired
+
+  Main <- as_tibble(c('Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Financials',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Profitability',
+            'Growth',
+            'Growth',
+            'Growth',
+            'Growth',
+            'Cash Flow',
+            'Cash Flow',
+            'Cash Flow',
+            'Cash Flow',
+            'Cash Flow',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Financial Health',
+            'Efficiency Ratios',
+            'Efficiency Ratios',
+            'Efficiency Ratios',
+            'Efficiency Ratios',
+            'Efficiency Ratios',
+            'Efficiency Ratios',
+            'Efficiency Ratios',
+            'Efficiency Ratios',
+            'Valuation Ratios',
+            'Valuation Ratios',
+            'Valuation Ratios',
+            'Valuation Ratios'
+  )) %>% rename(Main = value)
+
+  Sub<- as_tibble(c('Revenue USD Mil',
+          'Gross Margin %',
+          'Operating Income USD Mil',
+          'Operating Margin %',
+          'Net Income USD Mil',
+          'Earnings Per Share USD',
+          'Dividends USD',
+          'Payout Ratio % *',
+          'Shares Mil',
+          'Book Value Per Share * USD',
+          'Operating Cash Flow USD Mil',
+          'Cap Spending USD Mil',
+          'Free Cash Flow USD Mil',
+          'Free Cash Flow Per Share * USD',
+          'Working Capital USD Mil',
+          'Revenue',
+          'COGS',
+          'Gross Margin',
+          'SG&A',
+          'R&D',
+          'Other',
+          'Operating Margin',
+          'Net Int Inc & Other',
+          'EBT Margin',
+          'Tax Rate %',
+          'Net Margin %',
+          'Asset Turnover (Average)',
+          'Return on Assets %',
+          'Financial Leverage (Average)',
+          'Return on Equity %',
+          'Return on Invested Capital %',
+          'Interest Coverage',
+          'Year over Year',
+          '3-Year Average',
+          '5-Year Average',
+          '10-Year Average',
+          'Operating Cash Flow Growth % YOY',
+          'Free Cash Flow Growth % YOY',
+          'Cap Ex as a % of Sales',
+          'Free Cash Flow/Sales %',
+          'Free Cash Flow/Net Income',
+          'Cash & Short-Term Investments',
+          'Accounts Receivable',
+          'Inventory',
+          'Other Current Assets',
+          'Total Current Assets',
+          'Net PP&E',
+          'Intangibles',
+          'Other Long-Term Assets',
+          'Total Assets',
+          'Accounts Payable',
+          'Short-Term Debt',
+          'Taxes Payable',
+          'Accrued Liabilities',
+          'Other Short-Term Liabilities',
+          'Total Current Liabilities',
+          'Long-Term Debt',
+          'Other Long-Term Liabilities',
+          'Total Liabilities',
+          "Total Stockholders' Equity",
+          'Total Liabilities & Equity',
+          'Current Ratio',
+          'Quick Ratio',
+          'Financial Leverage',
+          'Debt/Equity',
+          'Days Sales Outstanding',
+          'Days Inventory',
+          'Payables Period',
+          'Cash Conversion Cycle',
+          'Receivables Turnover',
+          'Inventory Turnover',
+          'Fixed Assets Turnover',
+          'Asset Turnover',
+          'Price to Earnings',
+          'Price to Sales',
+          'Price to Book',
+          'Price to Cash Flow'
+)) %>% rename(Sub = value)
+
+  Categories <- Main %>% bind_cols(., Sub)
+
+  Out_plots <- list()
+
+  for(i in 1:length(Ratios)) {
+
+  Which <- Categories %>% filter(Sub == Ratios[i])
+
+  Cat <- Which %>% pull(Main)
+
+  # Plot
+
+  p <- Mdata %>%
+    filter(section == Cat) %>%
+    dplyr::select(data) %>%
+    unnest() %>%
+    filter(category == Ratios[i]) %>%
+    na.omit(value) %>%
+    ggplot() +
+    geom_line(aes(x = date, y = value), size = 2.5, col = "darkgreen") +
+    geom_line(aes(x = date, y = value)) +
+    ylab(Ratios[i])
+
+  assign(paste0(p, i),p)
+
+  Out_plots[[i]] <-  p
+
+  }
+
+ return(Out_plots)
+
+
+
+}
+
+

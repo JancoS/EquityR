@@ -1,0 +1,5 @@
+"0","FCFE_Value <- FCFE_Basic(Ticker,  Req, year, growth_rate)
+"
+"2","Error in mutate_impl(.data, dots) : 
+  Evaluation error: object 'EndDate' not found.
+"

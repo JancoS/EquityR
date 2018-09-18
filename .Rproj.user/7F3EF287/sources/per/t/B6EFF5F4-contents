@@ -1,0 +1,14 @@
+Package: EquityR
+Type: Package
+Title: Value Stocks Using Common Equity Valuation Methods
+Version: 0.1.0
+Author: Janco Strydom
+Maintainer: Janco Strydom <strydomjanco@yahoo.com>
+Description: Discount dividend model, free cash flow model and multiples for S&P 500 companies.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Imports: 
+  tidyquant (>= 0.4.0),
+  finreportr (>= 1.0.1)
+RoxygenNote: 6.1.0

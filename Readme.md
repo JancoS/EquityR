@@ -2,7 +2,7 @@
 title: "Readme"
 author: "Janco Strydom"
 date: "17 September 2018"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -112,6 +112,20 @@ growth_rate <- 0.11
 year <- 2017
 
 FCFE_Value <- FCFE_Basic(Ticker,  Req, year, growth_rate)
+
+# Calculate WACC
+
+Ticker <- "AAPL"
+Cost_Equity <- 0.12
+Cost_Debt <- 0.08
+Cost_Pref <- 0.15
+Tax_Rate <- 28
+Per_Equity <- 0.5
+Per_Debt <- 0.3
+
+WACC(Ticker, Cost_Equity, Cost_Debt, Cost_Pref, Tax_Rate, Per_Equity, Per_Debt)
+
+# Calculate 
 
 ```
 

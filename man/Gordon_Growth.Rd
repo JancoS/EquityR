@@ -18,7 +18,7 @@ Gordon_g The growth rate output
 The function calculates the growth rate based on the Gordon Growth model: g = r - D1/P
 }
 \examples{
-\dontrun {
+{
 
  Gordon_Growth("AAPL", Req_Rate = 0.2)
 

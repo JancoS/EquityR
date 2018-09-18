@@ -1,8 +1,8 @@
 #' @title Justified_PS
-#' @description Calculate the justified Price to Sales using fundamentals
+#' @description Calculate the justified Price to Sales (P/s) using fundamentals
 #' @param Ticker The symbol of the stock to be evaluated
 #' @param Req The required return on equity
-#' @param growth_rate Optional growth_rate as percentage, otherwise calculated using Growth_Rate function
+#' @param growth_rate Optional growth_rate (%), otherwise calculated using Growth_Rate function
 #' @export
 #' @return Just_PS The justified PS output
 

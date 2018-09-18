@@ -6,6 +6,11 @@
 #' @param growth_rate The growth rate g
 #' @export
 #' @return FCFE_Value
+#' @examples  {
+#'
+#'
+#'
+#' }
 
 FCFE_Basic <- function(Ticker, Req, year, growth_rate) {
 

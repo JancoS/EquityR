@@ -11,7 +11,7 @@ Justified_PE(Ticker, Req, growth_rate = 0)
 
 \item{Req}{The Required return on equity}
 
-\item{growth_rate}{Optional growth_rate (%), otherwise calculated using Growth_Rate function}
+\item{growth_rate}{Optional growth_rate  otherwise calculated using Growth_Rate function}
 }
 \value{
 Just_PE The justified PE as output

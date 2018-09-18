@@ -20,7 +20,7 @@ DDM_Out The results of the DDM model
 The function calculates stock value based on a single stage DDM model (Gordon Growth Model)
 }
 \examples{
-\dontrun {
+ {
 
 #Ticker <- "MSFT"
 #Req <- 0.12

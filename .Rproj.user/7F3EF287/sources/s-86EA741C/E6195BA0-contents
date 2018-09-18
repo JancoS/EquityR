@@ -5,6 +5,7 @@
 #' @param growth_rate The growth rate g
 #' @export
 #' @return FCFF_Value
+#' @examples
 
 
 FCFF_Basic <- function(Ticker, WACC, growth_rate) {

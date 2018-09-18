@@ -2,7 +2,7 @@
 #' @description Calculate the justified PE's
 #' @param Ticker Symbol of stock to be evaluated
 #' @param Req The Required return on equity
-#' @param growth_rate Optional growth_rate  otherwise calculated using Growth_Rate function
+#' @param growth_rate Optional growth_rate (%), otherwise calculated using Growth_Rate function
 #' @export
 #' @return Just_PE The justified PE as output
 

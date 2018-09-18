@@ -1,9 +1,9 @@
 #' @title WACC
-#' @description Calculate a company's WACC based on cost of Equity and cost of debt. The fraction of debt and equity can be provided by the user. Otherwise, the function aims to calculate the weights based on most recent balance sheet data collected from the getBalancesheet function
+#' @description Calculate a company's WACC based on cost of Equity and cost of debt. The fraction of debt and equity can be provided by the user. Otherwise, the function aims to calculate the weights based on most recent balance sheet data collected from the getBalancesheet() function
 #' @param Ticker The ticker of the company to evaluated
 #' @param cost_Equity The cost of equity as a fraction
 #' @param cost_Debt The cost of debt as a fraction
-#' @param Tax_Rate The tax rate as percentage
+#' @param Tax_Rate The tax rate (%)
 #' @param cost_Pref The cost of Preferred stock as a fraction
 #' @param Per_Equit Optional, the percentage equity
 #' @param Per_Debt Optional, the percentage debt

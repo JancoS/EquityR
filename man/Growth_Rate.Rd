@@ -16,7 +16,7 @@ Growth The estimated average and recent growth rate. Returns a list.
 This function aims to calculate the terminal growth rate g using the retention ratio b and return on equity (ROE). It calculates the growth rate using the most recent data or average data and returns both.
 }
 \examples{
-\dontrun {
+{
  # Calculate the growth rate g for AAPL. The function calculates the average ROE growth rate and most recent ROE growth rate
    growth_rate <- Growth_Rate("AAPL")
 }

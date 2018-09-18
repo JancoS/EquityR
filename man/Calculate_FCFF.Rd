@@ -15,11 +15,10 @@ Calculate_FCFF(Ticker, year)
 FCFF Returns the calculated FCFF
 }
 \description{
-The function calculates the free cash flow to firm (FCFF) using the cash flow financials from GetCashFlow function and the Morningstar data.
-             The FCFF is calculated from the Net Income, Change in working capital, depreciation expense and Capital expenditures (CAPEX).
+The function calculates the free cash flow to firm (FCFF) using the cash flow financials from GetCashFlow function and the Morningstar data. The FCFF is calculated from the Net Income, Change in working capital, depreciation expense and Capital expenditures (CAPEX).
 }
 \examples{
-\dontrun {
+ {
 
 Ticker <- "AAPL"
 year <- 2017

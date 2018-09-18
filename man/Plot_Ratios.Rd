@@ -18,7 +18,7 @@ Out_plots The output containing all plots as a list
 Plot financial ratios using the morningstar data of a specific company.
 }
 \examples{
-\dontrun {
+{
 
  Plot_Ratios("AAPL", "Net Income USD")
 

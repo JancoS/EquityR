@@ -5,7 +5,13 @@
 #' @param year Year when latest results is available
 #' @param growth_rate The growth rate g
 #' @export
+#' @seealso
 #' @return FCFE_Value
+#' @examples  {
+#'
+#'
+#'
+#' }
 
 FCFE_Basic <- function(Ticker, Req, year, growth_rate) {
 

@@ -1,6 +1,6 @@
 Package: EquityR
 Type: Package
-Title: Value Stocks Using Common Equity Valuation Methods
+Title: Common stock valuation methods. Including single stage DDM, multistage DDM and basic CF models. Package mainly builds on the tidyquant and finreportr packages. 
 Version: 0.1.0
 Author: Janco Strydom
 Maintainer: Janco Strydom <strydomjanco@yahoo.com>

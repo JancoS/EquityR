@@ -16,7 +16,7 @@ WACC(Ticker, cost_Equity, cost_Debt, cost_Pref, Tax_Rate, Per_Equity = 0,
 
 \item{cost_Pref}{The cost of Preferred stock as a fraction}
 
-\item{Tax_Rate}{The tax rate (%)}
+\item{Tax_Rate}{The tax rate as percentage}
 
 \item{Per_Debt}{Optional, the percentage debt}
 
@@ -26,6 +26,5 @@ WACC(Ticker, cost_Equity, cost_Debt, cost_Pref, Tax_Rate, Per_Equity = 0,
 WACC Return the WACC object
 }
 \description{
-Calculate a company's WACC based on cost of Equity and cost of debt. The fraction of debt and equity can be provided by the user.
- Otherwise, the function aims to calculate the weights based on most recent balance sheet data collected from the getBalancesheet() function
+Calculate a company's WACC based on cost of Equity and cost of debt. The fraction of debt and equity can be provided by the user. Otherwise, the function aims to calculate the weights based on most recent balance sheet data collected from the getBalancesheet function
 }

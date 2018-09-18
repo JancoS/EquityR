@@ -11,14 +11,11 @@ Justified_PS(Ticker, Req, growth_rate = 0)
 
 \item{Req}{The required return on equity}
 
-\item{growth_rate}{Optional growth_rate (%), otherwise calculated using Growth_Rate function}
+\item{growth_rate}{Optional growth_rate as percentage, otherwise calculated using Growth_Rate function}
 }
 \value{
 Just_PS The justified PS output
 }
 \description{
-Calculate the justified Price to Sales (P/s) using fundamentals
-}
-\author{
-Janco Strydom
+Calculate the justified Price to Sales using fundamentals
 }
